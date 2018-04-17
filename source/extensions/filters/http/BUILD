@@ -16,3 +16,11 @@ envoy_cc_library(
         "//source/common/singleton:const_singleton",
     ],
 )
+
+envoy_cc_library(
+    name = "filter_base",
+    hdrs = ["filter_base.h"],
+    deps = [
+        "//include/envoy/server:filter_config_interface",
+    ],
+)

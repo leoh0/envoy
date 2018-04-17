@@ -3,6 +3,7 @@
 #include "envoy/config/filter/http/buffer/v2/buffer.pb.h"
 #include "envoy/server/filter_config.h"
 
+#include "extensions/filters/http/filter_base.h"
 #include "extensions/filters/http/well_known_names.h"
 
 namespace Envoy {
@@ -13,8 +14,12 @@ namespace BufferFilter {
 /**
  * Config registration for the buffer filter. @see NamedHttpFilterConfigFactory.
  */
-class BufferFilterConfigFactory : public Server::Configuration::NamedHttpFilterConfigFactory {
+class BufferFilterConfigFactory
+    : public FactoryBase<envoy::config::filter::http::buffer::v2::Buffer> {
 public:
+  BufferFilterConfigFactory() : FactoryBase(HttpFilterNames::get().BUFFER) {}
+
+  // Server::Configuration::NamedHttpFilterConfigFactory
   Server::Configuration::HttpFilterFactoryCb
   createFilterFactory(const Json::Object& json_config, const std::string& stats_prefix,
                       Server::Configuration::FactoryContext& context) override;
@@ -22,12 +27,6 @@ public:
   createFilterFactoryFromProto(const Protobuf::Message& proto_config,
                                const std::string& stats_prefix,
                                Server::Configuration::FactoryContext& context) override;
-
-  ProtobufTypes::MessagePtr createEmptyConfigProto() override {
-    return ProtobufTypes::MessagePtr{new envoy::config::filter::http::buffer::v2::Buffer()};
-  }
-
-  std::string name() override { return HttpFilterNames::get().BUFFER; }
 
 private:
   Server::Configuration::HttpFilterFactoryCb
