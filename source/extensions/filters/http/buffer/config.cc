@@ -44,10 +44,7 @@ BufferFilterConfigFactory::createFilterFactory(const Json::Object& json_config,
 Server::Configuration::HttpFilterFactoryCb BufferFilterConfigFactory::createFilterFactoryFromProto(
     const Protobuf::Message& proto_config, const std::string& stats_prefix,
     Server::Configuration::FactoryContext& context) {
-  return createFilter(
-      MessageUtil::downcastAndValidate<const envoy::config::filter::http::buffer::v2::Buffer&>(
-          proto_config),
-      stats_prefix, context);
+  return createFilter(validate(proto_config), stats_prefix, context);
 }
 
 /**

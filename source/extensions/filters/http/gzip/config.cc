@@ -16,9 +16,7 @@ Server::Configuration::HttpFilterFactoryCb
 GzipFilterFactory::createFilterFactoryFromProto(const Protobuf::Message& proto_config,
                                                 const std::string&,
                                                 Server::Configuration::FactoryContext&) {
-  GzipFilterConfigSharedPtr config = std::make_shared<GzipFilterConfig>(
-      MessageUtil::downcastAndValidate<const envoy::config::filter::http::gzip::v2::Gzip&>(
-          proto_config));
+  GzipFilterConfigSharedPtr config = std::make_shared<GzipFilterConfig>(validate(proto_config));
   return [config](Http::FilterChainFactoryCallbacks& callbacks) -> void {
     callbacks.addStreamFilter(std::make_shared<GzipFilter>(config));
   };

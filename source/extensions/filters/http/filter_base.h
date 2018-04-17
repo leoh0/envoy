@@ -27,6 +27,10 @@ public:
 protected:
   FactoryBase(const std::string& name) : name_(name) {}
 
+  const ConfigProto& validate(const Protobuf::Message& proto_config) {
+    return MessageUtil::downcastAndValidate<const ConfigProto&>(proto_config);
+  }
+
 private:
   const std::string name_;
 };
